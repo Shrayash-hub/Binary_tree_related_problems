@@ -12,29 +12,34 @@
 class Solution {
 public:
     vector<int> postorderTraversal(TreeNode* root) {
-        vector<int> ans;
-        if(!root) return ans;
-
         stack<TreeNode*> st;
+        vector<int> ans;
         TreeNode* curr = root;
-        TreeNode* lastVisited = nullptr;
-
-        while(curr || !st.empty()){
-            // go as left as possible
-            if(curr){
+        while(!st.empty() || curr){
+            // go to the extreme left node until left node do not exist
+            if(curr!=NULL){
                 st.push(curr);
-                curr = curr->left;
+                curr=curr->left;
             }
-            else {
-                TreeNode* node = st.top();
-                // if right child exists and not yet processed
-                if(node->right && lastVisited != node->right){
-                    curr = node->right;
-                }
-                else {
-                    ans.push_back(node->val);
+            // if left node do not exist;
+            else{
+                // then go on the right node
+                TreeNode* temp = st.top()->right;
+                // if there is no right node , that means both the left and right node are processed , no process that root node
+                if(temp==NULL){
+                    temp=st.top();
                     st.pop();
-                    lastVisited = node;
+                    ans.push_back(temp->val);
+                    // if the current tops right is the previous top element , then also both right and left subtrees are proccessed
+                    while(!st.empty() && temp == st.top()->right){
+                        temp = st.top();
+                        st.pop();
+                        ans.push_back(temp->val);
+                    }
+                }
+                // else move to right part , coz all the left part is processed
+                else{
+                    curr = temp;
                 }
             }
         }
