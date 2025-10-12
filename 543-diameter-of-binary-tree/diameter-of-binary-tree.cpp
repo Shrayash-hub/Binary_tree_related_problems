@@ -21,7 +21,7 @@ public:
 
         int lh = height(root->left,diameter);
         int rh = height(root->right,diameter);
-        // we calculate lh and rh , while calculating height of tree, 
+        // we calculate lh and rh , while calculating height of tree,track the diameter also , at the same time 
         diameter = max(diameter,lh+rh);
         return 1+max(lh,rh);
     }
